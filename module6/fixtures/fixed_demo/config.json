@@ -1,0 +1,11 @@
+{
+  "dataset_id": "fixed_demo_v1",
+  "scenario_id": "fixed_demo",
+  "seed": 0,
+  "phase": "fixed",
+  "schema_version": "1.0.0",
+  "simulation_window_sec": 1000,
+  "observation_end_sec": 1000,
+  "engine_parameters": {"observation_drain_sec": 0},
+  "note": "Hand-checkable five-payment case that locks the metric definitions; not a statistical sample."
+}

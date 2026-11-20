@@ -1,0 +1,8 @@
+python      : 3.12.14
+platform    : Windows 11, PowerShell / cmd
+third-party : none (standard library only)
+engine      : Module 5 reviewed bundle (vendor/m3engine + m4rank + module5_funding)
+module3 pin : ea57cc82c01c86a1bd02aeae7247af4644a6df81
+module4 pin : 191bffd56a656544fa52a659d02652b42498fe80
+module5     : reviewed delivery 2026-11-16, git tree 5492a17c6b570a42a509934daefb1e835d576ffc
+fixtures    : module3/fixtures/formal (7 scenarios x 30 seeds), observation window 28800 s

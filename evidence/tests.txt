@@ -1,0 +1,22 @@
+test_empty_payment_results_is_reported (test_module6.DegradedInputs.test_empty_payment_results_is_reported) ... ok
+test_missing_balances_and_fx_do_not_raise (test_module6.DegradedInputs.test_missing_balances_and_fx_do_not_raise) ... ok
+test_balance_integral_ignores_out_of_order_rows (test_module6.EngineResultPath.test_balance_integral_ignores_out_of_order_rows) ... ok
+test_measure_matches_calculate_metrics (test_module6.EngineResultPath.test_measure_matches_calculate_metrics) ... ok
+test_completion_and_outstanding (test_module6.FixedCaseMetrics.test_completion_and_outstanding) ... ok
+test_delay_only_counts_settled_payments (test_module6.FixedCaseMetrics.test_delay_only_counts_settled_payments) ... ok
+test_every_expected_value_matches (test_module6.FixedCaseMetrics.test_every_expected_value_matches) ... ok
+test_fx_behaviour_and_cost (test_module6.FixedCaseMetrics.test_fx_behaviour_and_cost) ... ok
+test_liquidity_hours_are_a_time_integral (test_module6.FixedCaseMetrics.test_liquidity_hours_are_a_time_integral) ... ok
+test_observation_end_comes_from_config (test_module6.FixedCaseMetrics.test_observation_end_comes_from_config) ... ok
+test_overdue_includes_outstanding_payments_past_deadline (test_module6.FixedCaseMetrics.test_overdue_includes_outstanding_payments_past_deadline) ... ok
+test_priority_blocks (test_module6.FixedCaseMetrics.test_priority_blocks) ... ok
+test_falls_back_to_last_balance_timestamp (test_module6.ObservationEndpoint.test_falls_back_to_last_balance_timestamp) ... ok
+test_window_plus_drain (test_module6.ObservationEndpoint.test_window_plus_drain) ... ok
+test_ci_is_symmetric_and_collapses_for_one_observation (test_module6.Statistics.test_ci_is_symmetric_and_collapses_for_one_observation) ... ok
+test_p95_interpolation (test_module6.Statistics.test_p95_interpolation) ... ok
+test_paired_differences_are_formed_within_a_seed (test_module6.Statistics.test_paired_differences_are_formed_within_a_seed) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.007s
+
+OK

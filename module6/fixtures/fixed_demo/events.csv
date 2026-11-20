@@ -1,0 +1,6 @@
+run_id,event_seq,time,event_type,payment_id,fx_id,action,reason
+fixed_demo_v1,0,0,PAYMENT_ARRIVAL,P000001,,,
+fixed_demo_v1,1,0,PAYMENT_ARRIVAL,P000002,,,
+fixed_demo_v1,2,20,FUNDING_REVIEW,,,TOP_UP,insufficient_rmb
+fixed_demo_v1,3,140,FX_COMPLETION,,FX0001,,
+fixed_demo_v1,4,150,PAYMENT_CONFIRMATION,P000001,,SUBMIT,

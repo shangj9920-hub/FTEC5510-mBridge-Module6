@@ -1,0 +1,3 @@
+run_id,event_seq,time,rmb_total,rmb_reserved,rmb_locked,rmb_available,hkd_total,hkd_committed,hkd_available
+fixed_demo_v1,0,0,20000000.00,800000.00,0.00,19200000.00,100000000.00,0.00,99500000.00
+fixed_demo_v1,1,1000,20000000.00,800000.00,0.00,19200000.00,100000000.00,0.00,99500000.00

@@ -1,0 +1,40 @@
+====================================================================================================
+Module 6 -- reconciliation of computed metrics against engine-reported numbers
+====================================================================================================
+fixtures : E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_repos\FTEC5510-mBridge-Module3-main\FTEC5510-mBridge-Module3-main\module3\fixtures\formal
+seed set : formal (30 seeds)
+matrix   : 7 x 30 x 5 = 1050 runs
+  [baseline] reconciled, cumulative 150
+  [low_rmb_liquidity] reconciled, cumulative 300
+  [payment_surge] reconciled, cumulative 450
+  [tight_deadlines] reconciled, cumulative 600
+  [large_payments] reconciled, cumulative 750
+  [delayed_inflows] reconciled, cumulative 900
+  [fx_capacity_shock] reconciled, cumulative 1050
+
+----------------------------------------------------------------------------------------------------
+PER-CHECK SUMMARY
+----------------------------------------------------------------------------------------------------
+check                       runs    pass    fail
+------------------------------------------------
+n_payments                  1050    1050       0
+settled                     1050    1050       0
+pending                     1050    1050       0
+queued                      1050    1050       0
+ineligible                  1050    1050       0
+status_partition            1050    1050       0
+fx_initiated                1050    1050       0
+fx_completed                1050    1050       0
+fx_cost_rmb                 1050    1050       0
+rmb_total_end               1050    1050       0
+hkd_total_end               1050    1050       0
+rmb_locked_end              1050    1050       0
+balance_time_monotone       1050    1050       0
+rmb_liquidity_identity      1050    1050       0
+
+runs reconciled: 1050   fully clean: 1050   with a failed check: 0
+
+csv cross-check: 7 runs, 0 differences
+
+RESULT: PASS -- every computed number matches the engine
+written: evidence\reconciliation.csv, evidence\reconciliation_by_run.csv

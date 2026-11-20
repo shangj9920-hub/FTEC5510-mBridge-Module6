@@ -1,0 +1,48 @@
+﻿==============================================================================
+INDEPENDENT AUDIT -- E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_audit_pkg\FTEC5510-mBridge-Module6
+==============================================================================
+
+L1  DATA -- 210 datasets against the Module 2 contract
+  PASS  210 datasets present   found 210
+  PASS  30 distinct seeds per scenario   found 30
+  PASS  no contract or integrity violation
+
+L2  PARAMS -- every config.json against the values the docs claim
+  PASS  all fixtures carry the documented parameters
+  PASS  low_rmb_liquidity really lowers the opening balance   1,800,000 < 6,000,000
+  PASS  opening RMB differs from the proposal's 20m (deviation is real)   6,000,000
+  PASS  spread differs from the proposal's 3 bps (deviation is real)   15.0 bps
+  PASS  capacity mode is per_trade in every fixture (so FX never runs out)   modes={None}
+
+L3  RESULTS -- headline numbers recomputed from evidence/metrics.csv
+  PASS  1050 metric rows   found 1050
+  PASS  no run used a fallback module
+  PASS  observation endpoint is 28800 s in every run
+  PASS  no ineligible payments in the fixtures
+  PASS  35 scenario x strategy cells   found 35
+  PASS  quoted value: completion payment_surge S1   table=0.683 doc=0.683
+  PASS  quoted value: completion payment_surge S2   table=0.706 doc=0.706
+  PASS  quoted value: completion large_payments S2   table=0.579 doc=0.579
+  PASS  quoted value: completion fx_shock S2   table=0.988 doc=0.988
+  PASS  quoted value: P95 delay payment_surge S2   table=3,489.968 doc=3,490.000
+  PASS  quoted value: P95 delay large_payments S2   table=6,111.618 doc=6,112.000
+  PASS  quoted value: URGENT delay baseline S2   table=48.250 doc=48.200
+  PASS  quoted value: URGENT completion payment_surge S2   table=0.908 doc=0.908
+  PASS  quoted value: URGENT completion large_payments S2   table=0.839 doc=0.839
+  PASS  quoted value: RMB hours baseline S1 (millions)   table=19.621 doc=19.620
+  PASS  quoted paired difference: URGENT delay S2-S1 baseline   recomputed=-9.19 doc=-9.20
+  PASS  quoted paired difference: URGENT delay S2-S1 surge   recomputed=-385.76 doc=-385.80
+  PASS  quoted paired difference: URGENT delay S2-S1 large   recomputed=-736.62 doc=-736.60
+  PASS  quoted paired difference: NORMAL completion S2-S1 surge (pp)   recomputed=-4.55 doc=-4.55
+  PASS  quoted paired difference: NORMAL completion S2-S1 large (pp)   recomputed=-6.21 doc=-6.21
+  PASS  quoted paired difference: FX trades S3-S1 baseline   recomputed=-7.70 doc=-7.70
+  PASS  quoted paired difference: all delay S3-S1 surge   recomputed=+882.99 doc=+883.00
+  PASS  internal identities hold in all 1050 rows
+  PASS  comparison.csv has 35 cells   found 35
+  PASS  comparison.csv agrees with metrics.csv
+
+L4  REPLAY -- re-simulate a sample and compare cell by cell
+  PASS  45 replayed runs match the delivered table exactly
+
+==============================================================================
+RESULT: PASS -- nothing inconsistent found

@@ -1,0 +1,6 @@
+run_id,strategy_id,payment_id,arrival_time,amount_rmb,priority,deadline_time,submit_time,settle_time,final_status
+fixed_demo_v1,S1,P000001,0,1000000.00,URGENT,200,10,150,SETTLED
+fixed_demo_v1,S1,P000002,0,2000000.00,NORMAL,300,10,350,SETTLED
+fixed_demo_v1,S1,P000003,100,3000000.00,NORMAL,400,,
+fixed_demo_v1,S1,P000004,200,4000000.00,HIGH,1500,,
+fixed_demo_v1,S1,P000005,300,500000.00,NORMAL,900,,

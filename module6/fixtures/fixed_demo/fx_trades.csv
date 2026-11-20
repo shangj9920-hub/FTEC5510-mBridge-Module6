@@ -1,0 +1,2 @@
+run_id,fx_id,target_payment_id,initiated_at,completed_at,topup_rmb,hkd_principal,hkd_fee,spread_cost_rmb,total_cost_rmb,status,reason
+fixed_demo_v1,FX0001,P000001,20,140,1000000.00,1111111.11,80.00,166.67,500.00,COMPLETED,executable_fx

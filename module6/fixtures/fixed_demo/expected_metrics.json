@@ -1,0 +1,23 @@
+{
+  "ALL.n": 5,
+  "ALL.settled": 2,
+  "ALL.completion": 0.4,
+  "ALL.outstanding": 3,
+  "ALL.outstanding_amount_rmb": 7500000.0,
+  "ALL.mean_delay": 250.0,
+  "ALL.p95_delay": 340.0,
+  "ALL.due": 4,
+  "ALL.overdue": 3,
+  "ALL.overdue_rate": 0.75,
+  "URGENT.completion": 1.0,
+  "URGENT.mean_delay": 150.0,
+  "NORMAL.completion": 0.3333333333333333,
+  "NORMAL.overdue_rate": 1.0,
+  "HIGH.completion": 0.0,
+  "rmb_liquidity_hours": 5555555.555555556,
+  "hkd_liquidity_hours": 27777777.777777776,
+  "fx_initiated": 1,
+  "fx_completed": 1,
+  "fx_cost_rmb": 500.0,
+  "obs_end_sec": 1000
+}

@@ -1,0 +1,3 @@
+# No third-party dependencies.
+# This module uses the Python standard library only (csv, json, math, statistics, pathlib).
+# Python 3.10 or newer is required by the Module 3-5 engine and by type hints here.

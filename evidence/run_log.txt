@@ -1,0 +1,152 @@
+﻿====================================================================================================
+Module 6 -- batch runs and metrics
+====================================================================================================
+engine dir : E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_repos\FTEC5510-mBridge-Module3-main\FTEC5510-mBridge-Module3-main\module3
+module 4   : E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_repos\FTEC5510-mBridge-Module5-main\FTEC5510-mBridge-Module5-main\vendor
+module 5   : E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_repos\FTEC5510-mBridge-Module5-main\FTEC5510-mBridge-Module5-main
+patched    : E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_repos\FTEC5510-mBridge-Module5-main\FTEC5510-mBridge-Module5-main\vendor
+fixtures   : E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_repos\FTEC5510-mBridge-Module3-main\FTEC5510-mBridge-Module3-main\module3\fixtures\formal
+matrix     : 7 scenarios x 30 seeds x 5 strategies = 1050 runs
+  engine loaded from: E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_repos\FTEC5510-mBridge-Module5-main\FTEC5510-mBridge-Module5-main\vendor\m3engine\__init__.py
+  [baseline] 150 runs done, 150/1050 cumulative
+  [low_rmb_liquidity] 150 runs done, 300/1050 cumulative
+  [payment_surge] 150 runs done, 450/1050 cumulative
+  [tight_deadlines] 150 runs done, 600/1050 cumulative
+  [large_payments] 150 runs done, 750/1050 cumulative
+  [delayed_inflows] 150 runs done, 900/1050 cumulative
+  [fx_capacity_shock] 150 runs done, 1050/1050 cumulative
+
+finished 1050 runs -> tmp_out\metrics.csv
+
+[OK] every run has using_fallback_module4/5 == false
+
+====================================================================================================
+TABLE 1  overall service (mean over seeds)
+====================================================================================================
+scenario              strategy    completion   overdue    P95(s)   mean(s)     RMB hrs
+baseline              S0               0.998     0.000       226        60  19,598,687
+baseline              S1               0.998     0.000       218        57  19,621,486
+baseline              S2               0.998     0.000       203        52  19,655,068
+baseline              S3               0.993     0.010     1,389       294  18,854,816
+baseline              S4               0.995     0.000     1,299       236  18,910,116
+low_rmb_liquidity     S0               0.979     0.004       276        97  10,235,623
+low_rmb_liquidity     S1               0.990     0.002       285        93  10,238,136
+low_rmb_liquidity     S2               0.991     0.002       270        83  10,305,893
+low_rmb_liquidity     S3               0.984     0.027     1,943       523   8,825,021
+low_rmb_liquidity     S4               0.990     0.001     1,918       422   8,955,269
+payment_surge         S0               0.630     0.235     6,341     1,052  11,552,310
+payment_surge         S1               0.683     0.189     5,902       992  10,826,016
+payment_surge         S2               0.706     0.141     3,490       595  10,979,682
+payment_surge         S3               0.677     0.239     6,543     1,875  10,611,195
+payment_surge         S4               0.704     0.135     4,551     1,060  10,699,422
+tight_deadlines       S0               0.998     0.004       226        60  19,598,687
+tight_deadlines       S1               0.998     0.004       218        57  19,621,486
+tight_deadlines       S2               0.998     0.002       203        52  19,661,259
+tight_deadlines       S3               0.995     0.028     1,211       247  18,893,300
+tight_deadlines       S4               0.995     0.002       976       188  18,993,669
+large_payments        S0               0.453     0.463    10,590     1,870  12,059,692
+large_payments        S1               0.562     0.361     8,356     1,743  10,187,934
+large_payments        S2               0.579     0.335     6,112     1,189  10,262,827
+large_payments        S3               0.559     0.375     8,591     2,028  10,059,174
+large_payments        S4               0.578     0.340     6,388     1,397  10,138,637
+delayed_inflows       S0               0.999     0.000       233        68  15,652,249
+delayed_inflows       S1               0.999     0.000       224        65  15,672,566
+delayed_inflows       S2               0.999     0.000       222        61  15,727,497
+delayed_inflows       S3               0.981     0.018     1,493       354  14,744,238
+delayed_inflows       S4               0.986     0.000     1,534       298  14,833,125
+fx_capacity_shock     S0               0.978     0.009       697       122  19,601,454
+fx_capacity_shock     S1               0.979     0.007       450        94  19,525,834
+fx_capacity_shock     S2               0.988     0.002       280        68  19,564,164
+fx_capacity_shock     S3               0.964     0.025     1,729       366  18,783,736
+fx_capacity_shock     S4               0.970     0.009     1,583       294  18,829,662
+
+====================================================================================================
+TABLE 2  completion by priority, S1 -> S2  (* = 95% CI excludes 0)
+====================================================================================================
+scenario                            URGENT                HIGH              NORMAL
+baseline                     0.995->0.995        0.997->0.999        0.998->0.998 
+low_rmb_liquidity            0.984->0.987        0.991->0.996        0.990->0.990 
+payment_surge                0.670->0.908*       0.688->0.803*       0.683->0.638*
+tight_deadlines              0.995->0.995        0.997->0.999        0.998->0.998 
+large_payments               0.565->0.839*       0.548->0.667*       0.567->0.505*
+delayed_inflows              0.997->0.997        1.000->1.000        0.998->0.998 
+fx_capacity_shock            0.979->0.989*       0.978->0.993        0.980->0.986 
+
+====================================================================================================
+TABLE 3  paired differences S2 vs S1 (same seed), mean  (* = CI excludes 0)
+====================================================================================================
+metric                          baseline  low_rmb_liqu  payment_surg  tight_deadli  large_paymen  delayed_infl  fx_capacity_
+URGENT.mean_delay                  -9.2*        -29.3*       -385.8*         -8.9*       -736.6*         -9.9*        -67.2*
+URGENT.p95_delay                  -28.3*        -104.5      -2180.4*        -28.3*      -2058.5*        -39.4*       -326.4*
+NORMAL.completion                  -0.04         -0.03        -4.55*         -0.04        -6.21*         +0.00         +0.55
+NORMAL.overdue_rate                +0.00         +0.00        +3.05*         +0.00        +5.75*         +0.00         -0.07
+ALL.completion                     +0.00         +0.11        +2.26*         +0.00        +1.69*         +0.00         +0.81
+fx_initiated                       +1.3*         +2.3*         +4.3*         +2.2*         +2.1*         +2.2*         +3.3*
+
+====================================================================================================
+TABLE 4  other contrasts (delay in s, completion in pp)
+====================================================================================================
+fx_initiated      S1vS0            +0.1        -0.2       -3.1*        +0.1       -2.0*        +0.4       -3.2*
+fx_initiated      S3vS1           -7.7*      -11.0*      -12.0*       -6.8*       -4.6*      -11.1*       -8.4*
+fx_initiated      S4vS1           -7.2*      -10.1*      -11.2*       -5.4*       -2.9*       -9.1*       -7.3*
+fx_initiated      S4vS2           -8.6*      -12.4*      -15.6*       -7.6*       -5.0*      -11.3*      -10.6*
+ALL.completion    S1vS0           +0.03      +1.03*      +5.29*       +0.03     +10.92*       +0.00       +0.14
+ALL.completion    S3vS1          -0.44*      -0.61*       -0.58      -0.31*       -0.36      -1.72*      -1.53*
+ALL.completion    S4vS1           -0.25       +0.00      +2.11*      -0.25*      +1.53*      -1.22*       -0.94
+ALL.completion    S4vS2           -0.25       -0.11       -0.15      -0.25*       -0.17      -1.22*       -1.75
+ALL.mean_delay    S1vS0           -3.4*        -3.5       -60.7       -3.4*      -126.9       -3.7*       -27.6
+ALL.mean_delay    S3vS1         +237.9*     +429.6*     +883.0*     +190.1*     +285.7*     +289.3*     +272.4*
+ALL.mean_delay    S4vS1         +179.6*     +328.8*       +67.9     +131.6*     -345.7*     +233.0*     +199.9*
+ALL.mean_delay    S4vS2         +183.7*     +339.0*     +464.3*     +136.0*     +208.2*     +236.2*     +226.2*
+
+====================================================================================================
+TABLE 5  resources and FX cost (mean)
+====================================================================================================
+scenario              strategy      RMB hrs      HKD hrs  FX cnt   FX cost       FX RMB
+baseline              S0         19,598,687  100,863,268    38.4  13,670.3    7,204,095
+baseline              S1         19,621,486  100,841,731    38.5  13,704.7    7,222,237
+baseline              S2         19,655,068  100,810,721    39.8  13,801.3    7,222,596
+baseline              S3         18,854,816  103,583,766    30.8  12,850.0    6,981,962
+baseline              S4         18,910,116  103,163,714    31.3  12,993.2    7,056,060
+low_rmb_liquidity     S0         10,235,623   74,483,546    58.5  20,720.1   10,939,736
+low_rmb_liquidity     S1         10,238,136   74,461,257    58.3  20,685.1   10,925,213
+low_rmb_liquidity     S2         10,305,893   74,370,996    60.6  20,888.0   10,947,676
+low_rmb_liquidity     S3          8,825,021   79,425,103    47.4  19,683.0   10,740,385
+low_rmb_liquidity     S4          8,955,269   78,656,334    48.3  19,878.0   10,828,105
+payment_surge         S0         11,552,310   45,405,256    69.4  24,541.3   13,011,690
+payment_surge         S1         10,826,016   45,810,269    66.3  24,078.2   12,852,034
+payment_surge         S2         10,979,682   44,883,732    70.6  24,548.1   12,957,103
+payment_surge         S3         10,611,195   54,981,880    54.3  23,046.7   12,738,911
+payment_surge         S4         10,699,422   50,712,544    55.0  23,353.6   12,908,058
+tight_deadlines       S0         19,598,687  100,863,268    38.4  13,670.3    7,204,095
+tight_deadlines       S1         19,621,486  100,841,731    38.5  13,704.7    7,222,237
+tight_deadlines       S2         19,661,259  100,805,825    40.7  13,863.7    7,222,596
+tight_deadlines       S3         18,893,300  103,135,788    31.7  12,965.0    7,047,502
+tight_deadlines       S4         18,993,669  102,674,825    33.1  13,082.0    7,061,157
+large_payments        S0         12,059,692   32,797,893    27.4  21,507.0   13,001,685
+large_payments        S1         10,187,934   33,840,042    25.4  20,962.0   12,736,363
+large_payments        S2         10,262,827   32,787,114    27.5  21,409.8   12,932,175
+large_payments        S3         10,059,174   36,953,824    20.8  20,562.9   12,691,169
+large_payments        S4         10,138,637   35,200,044    22.5  21,023.4   12,914,609
+delayed_inflows       S0         15,652,249   94,159,651    43.7  15,678.2    8,317,495
+delayed_inflows       S1         15,672,566   94,135,061    44.1  15,711.2    8,321,872
+delayed_inflows       S2         15,727,497   94,090,076    46.3  15,874.5    8,326,790
+delayed_inflows       S3         14,744,238   97,717,744    33.0  13,999.6    7,673,857
+delayed_inflows       S4         14,833,125   97,261,129    35.0  14,323.0    7,782,950
+fx_capacity_shock     S0         19,601,454  101,953,310    38.3  13,030.4    6,771,035
+fx_capacity_shock     S1         19,525,834  102,451,491    35.2  11,965.5    6,207,613
+fx_capacity_shock     S2         19,564,164  101,922,058    38.5  12,688.0    6,545,455
+fx_capacity_shock     S3         18,783,736  106,045,180    26.7  10,343.6    5,551,688
+fx_capacity_shock     S4         18,829,662  105,799,320    27.9  10,759.5    5,773,704
+
+====================================================================================================
+VALIDATION  does my pipeline reproduce Module 4's published numbers?
+====================================================================================================
+  DIRECTION-OK baseline            URGENT.mean_delay S2-S1 = -9.1925  [CI -13.8724,-4.5126]  M4 doc -11.1000
+  DIRECTION-OK low_rmb_liquidity   URGENT.mean_delay S2-S1 = -29.2612  [CI -53.6407,-4.8818]  M4 doc -24.1000
+  MATCH       payment_surge       NORMAL.completion S2-S1 = -0.0455  [CI -0.0551,-0.0358]  M4 doc -0.0480
+  MATCH       large_payments      NORMAL.completion S2-S1 = -0.0621  [CI -0.0735,-0.0507]  M4 doc -0.0620
+  RESULT: PASS
+
+outputs: tmp_out\metrics.csv  tmp_out\comparison.csv
+Next: module6/make_figures.py for the two figures, module6/reconcile.py for the reconciliation record.

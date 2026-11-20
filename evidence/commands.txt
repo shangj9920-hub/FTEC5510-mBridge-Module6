@@ -1,0 +1,22 @@
+# Module 6 -- commands used for the reported run (2026-11-19)
+
+# 1) acceptance tests
+python -m unittest discover -s module6/tests -v
+
+# 2) full matrix: 7 scenarios x 30 formal seeds x S0-S4 = 1050 runs
+python module6/run_module6.py --repos <dir containing module3/ module4/ module5/> --out module6_out
+
+# 3) ten-run smoke test used before the full run
+python module6/run_module6.py --repos <same dir> --smoke
+
+# 4) two figures
+python module6/make_figures.py --metrics module6_out/metrics.csv --out figures
+
+# 5) single-run check of one published number
+python module6/calculate_metrics.py --run-dir <run dir> --meta '{"run_id":"baseline_seed20001_S2","scenario_id":"baseline","seed":20001,"strategy_id":"S2"}'
+
+# 6) per-run reconciliation against the engine's own counters (14 checks x 1050 runs)
+python module6/reconcile.py --repos <same dir> --out evidence --csv-check 7
+
+# 7) independent audit: data contract, parameters, quoted numbers, replay sample
+python module6/audit.py <this package> <dir with module3/4/5>
