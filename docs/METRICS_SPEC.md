@@ -32,6 +32,12 @@ Let `T_end = observation_end_sec` (Module 3's summary; derived from
 | 4 | Outstanding | count and `amount_rmb` of payments not settled at `T_end` | reported next to delay, never instead of it |
 | 5 | RMB / HKD liquidity hours | trapezoidal integral of `rmb_total` / `hkd_total` over event time ÷ 3600 | `rmb_total` already contains reserve and locks, so nothing is double counted; RMB and HKD are reported separately |
 | 6 | FX economic cost (RMB) | Σ `total_cost_rmb` over **all initiated trades** (a trade's fee is committed at initiation, so a trade still pending at `T_end` has already incurred it); `fx_completed` reports how many settled | exchange **principal** is excluded and reported separately as `fx_hkd_principal`, which counts **completed** trades only (funds actually received) |
+| 8 | Delay quantiles | `p50`, `p90`, `p95`, `p99` of the settled-payment delay, same interpolation rule | proposal 5.2 "Delay distribution" |
+| 9 | Queue waiting time | per payment: `submit_time - arrival_time`; if never submitted, `T_end - arrival_time` (censored at the observation endpoint) | proposal 4.5 "maximum time spent queued up to submission or the observation endpoint" |
+| 10 | Outstanding share | `#unpaid / #payments` at `T_end` | proposal 5.2 |
+| 11 | Queue length (series) | at time `t`: `#arrived - #settled` (ineligible excluded) | proposal 5.2 "queue-length chart" |
+| 12 | Improvement rate | `(S1 - x) / S1` for lower-is-better metrics, `(x - S1) / S1` for completion; positive = better; undefined when S1 is 0 | proposal 4.5 |
+
 | 7 | FX failure fee | Σ `failure_fee_rmb` | reported separately from economic cost |
 
 Rules that follow from the work split:

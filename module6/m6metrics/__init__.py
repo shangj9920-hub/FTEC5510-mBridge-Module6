@@ -24,6 +24,7 @@ from .core import (
     measure,
     opt_int,
     p95,
+    pctl,
 )
 from .stats import ci95, mean_of, paired_diffs
 
@@ -33,6 +34,7 @@ __all__ = [
     "block_metrics",
     "liquidity_hours",
     "p95",
+    "pctl",
     "fnum",
     "opt_int",
     "PRIORITIES",

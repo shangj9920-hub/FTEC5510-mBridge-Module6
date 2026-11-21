@@ -1,4 +1,4 @@
-﻿====================================================================================================
+====================================================================================================
 Module 6 -- batch runs and metrics
 ====================================================================================================
 engine dir : E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_repos\FTEC5510-mBridge-Module3-main\FTEC5510-mBridge-Module3-main\module3
@@ -17,6 +17,7 @@ matrix     : 7 scenarios x 30 seeds x 5 strategies = 1050 runs
   [fx_capacity_shock] 150 runs done, 1050/1050 cumulative
 
 finished 1050 runs -> tmp_out\metrics.csv
+  also wrote comparison.csv (vs S1) and contrasts.csv (S4-S2, S4-S3)
 
 [OK] every run has using_fallback_module4/5 == false
 
@@ -90,14 +91,17 @@ fx_initiated      S1vS0            +0.1        -0.2       -3.1*        +0.1     
 fx_initiated      S3vS1           -7.7*      -11.0*      -12.0*       -6.8*       -4.6*      -11.1*       -8.4*
 fx_initiated      S4vS1           -7.2*      -10.1*      -11.2*       -5.4*       -2.9*       -9.1*       -7.3*
 fx_initiated      S4vS2           -8.6*      -12.4*      -15.6*       -7.6*       -5.0*      -11.3*      -10.6*
+fx_initiated      S4vS3            +0.5        +0.9        +0.7       +1.4*       +1.7*       +2.0*        +1.1
 ALL.completion    S1vS0           +0.03      +1.03*      +5.29*       +0.03     +10.92*       +0.00       +0.14
 ALL.completion    S3vS1          -0.44*      -0.61*       -0.58      -0.31*       -0.36      -1.72*      -1.53*
 ALL.completion    S4vS1           -0.25       +0.00      +2.11*      -0.25*      +1.53*      -1.22*       -0.94
 ALL.completion    S4vS2           -0.25       -0.11       -0.15      -0.25*       -0.17      -1.22*       -1.75
+ALL.completion    S4vS3           +0.19      +0.61*      +2.69*       +0.06      +1.89*      +0.50*       +0.58
 ALL.mean_delay    S1vS0           -3.4*        -3.5       -60.7       -3.4*      -126.9       -3.7*       -27.6
 ALL.mean_delay    S3vS1         +237.9*     +429.6*     +883.0*     +190.1*     +285.7*     +289.3*     +272.4*
 ALL.mean_delay    S4vS1         +179.6*     +328.8*       +67.9     +131.6*     -345.7*     +233.0*     +199.9*
 ALL.mean_delay    S4vS2         +183.7*     +339.0*     +464.3*     +136.0*     +208.2*     +236.2*     +226.2*
+ALL.mean_delay    S4vS3          -58.3*     -100.8*     -815.1*      -58.4*     -631.3*      -56.3*      -72.5*
 
 ====================================================================================================
 TABLE 5  resources and FX cost (mean)

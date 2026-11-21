@@ -246,6 +246,32 @@ def layer_results(evidence: Path) -> None:
     check(not bad, "internal identities hold in all 1050 rows",
           "" if not bad else f"{len(bad)} violations, first: {bad[0]}")
 
+    # improvement rate must match its definition (proposal 4.5)
+    comp0 = read_csv(evidence / "comparison.csv")
+    bad = []
+    for c in comp0:
+        if c["strategy_id"] == "S1":
+            continue
+        sc = c["scenario_id"]
+        base = mean(sc, "S1", "ALL.mean_delay")
+        imp = c.get("impr_ALL.mean_delay_vs_S1", "")
+        if imp not in ("", None) and base:
+            want = (base - mean(sc, c["strategy_id"], "ALL.mean_delay")) / base
+            if abs(float(imp) - want) > 1e-6:
+                bad.append(f"{sc}/{c['strategy_id']}: {imp} != {want:.6f}")
+    check(not bad, "improvement rates match (S1 - x) / S1",
+          "" if not bad else f"{len(bad)} mismatches, first: {bad[0]}")
+
+    # the new proposal-5.2 columns must be present and finite
+    need = ["ALL.p50_delay", "ALL.p90_delay", "ALL.p99_delay",
+            "ALL.max_queue_s", "ALL.outstanding_share", "NORMAL.max_queue_s"]
+    missing_cols = [k for k in need if k not in rows[0]]
+    nonfinite = [k for k in need if k in rows[0]
+                 and any(r[k] in ("", None) for r in rows)]
+    check(not missing_cols and not nonfinite,
+          "queue and distribution columns present in all 1050 rows",
+          f"missing={missing_cols} blank={nonfinite}")
+
     # the comparison table must agree with the metric table
     comp = read_csv(evidence / "comparison.csv")
     check(len(comp) == 35, "comparison.csv has 35 cells", f"found {len(comp)}")

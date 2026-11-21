@@ -17,6 +17,6 @@ test_p95_interpolation (test_module6.Statistics.test_p95_interpolation) ... ok
 test_paired_differences_are_formed_within_a_seed (test_module6.Statistics.test_paired_differences_are_formed_within_a_seed) ... ok
 
 ----------------------------------------------------------------------
-Ran 17 tests in 0.007s
+Ran 17 tests in 0.006s
 
 OK

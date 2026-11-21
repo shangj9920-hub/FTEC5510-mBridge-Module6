@@ -20,3 +20,8 @@ python module6/reconcile.py --repos <same dir> --out evidence --csv-check 7
 
 # 7) independent audit: data contract, parameters, quoted numbers, replay sample
 python module6/audit.py <this package> <dir with module3/4/5>
+
+# contrasts.csv (S4-S2, S4-S3) is written by run_module6.py alongside comparison.csv
+
+# 8) appendix figures: queue length, RMB balance path, delay distribution
+python module6/make_appendix_figures.py --metrics evidence/metrics.csv --series evidence/series.csv --out evidence/figures

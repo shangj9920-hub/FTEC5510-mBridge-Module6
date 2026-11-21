@@ -21,7 +21,8 @@ Python **standard library only** — no third-party packages, same as Modules 3�
 | Metric calculation program (`calculate_metrics`) | `module6/m6metrics/api.py` |
 | Batch experiment runner (7 scenarios × 30 seeds × 5 strategies) | `module6/run_module6.py` |
 | Strategy comparison table with 95% confidence intervals | `evidence/comparison.csv` |
-| Two core figures | `evidence/figures/` |
+| Incremental-effect contrasts S4-S2 and S4-S3 (proposal 4.3) | `evidence/contrasts.csv`, `docs/RESULTS.md` 4b |
+| Two core figures plus three appendix figures (queue length, balance path, delay distribution) | `evidence/figures/` |
 | Findings, limitations and next steps | `docs/RESULTS.md`, `docs/PRESENTATION.md` |
 | Metric definitions and the decisions Module 6 had to make | `docs/METRICS_SPEC.md` |
 
@@ -36,8 +37,10 @@ python -m unittest discover -s module6/tests -v
 # 2) reproduce the whole result set (needs the three module repositories)
 python module6/run_module6.py --repos <path-with-module3/4/5> --out module6_out
 
-# 3) regenerate the two figures from metrics.csv
+# 3) regenerate the figures from metrics.csv
 python module6/make_figures.py --metrics module6_out/metrics.csv --out figures
+python module6/make_appendix_figures.py --metrics module6_out/metrics.csv `
+    --series module6_out/series.csv --out figures
 
 # 4) independent audit: data contract, parameters, quoted numbers, 45-run replay
 python module6/audit.py . <path-with-module3/4/5>
@@ -91,6 +94,7 @@ docs/
 evidence/
 ├── metrics.csv               1,050 rows × 39 columns
 ├── comparison.csv            35 rows: cell means + paired difference vs S1 + 95% CI
+├── contrasts.csv             112 rows: S4-S2 and S4-S3 contrasts (proposal 4.3)
 ├── run_log.txt               console record of the reported run
 └── figures/                  fig1_benefit.png, fig2_fairness.png
 ```

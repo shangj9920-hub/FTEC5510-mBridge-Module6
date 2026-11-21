@@ -64,6 +64,15 @@ def block_metrics(subset: list, obs_end: int) -> dict:
     outstanding_amount = sum(fnum(r.get("amount_rmb")) for r in subset
                              if r.get("final_status") != "SETTLED")
 
+    # Queue waiting time (proposal 4.5: "maximum time spent queued up to submission
+    # or the observation endpoint"): submitted payments stop the clock at submission,
+    # the rest are censored at the observation endpoint.
+    waits = []
+    for r in subset:
+        submitted = opt_int(r.get("submit_time"))
+        waits.append(submitted - int(float(r["arrival_time"])) if submitted is not None
+                     else obs_end - int(float(r["arrival_time"])))
+
     return {
         "n": len(subset),
         "settled": len(settled),
@@ -72,11 +81,30 @@ def block_metrics(subset: list, obs_end: int) -> dict:
         "outstanding_amount_rmb": outstanding_amount,
         "total_amount_rmb": sum(fnum(r.get("amount_rmb")) for r in subset),
         "mean_delay": (sum(delays) / len(delays)) if delays else None,
+        "p50_delay": pctl(delays, 0.50),
+        "p90_delay": pctl(delays, 0.90),
         "p95_delay": p95(delays),
+        "p99_delay": pctl(delays, 0.99),
+        "max_queue_s": max(waits) if waits else None,
+        "mean_queue_s": (sum(waits) / len(waits)) if waits else None,
+        "outstanding_share": (len(subset) - len(settled)) / len(subset) if subset else None,
         "due": len(due),
         "overdue": len(overdue),
         "overdue_rate": (len(overdue) / len(due)) if due else None,
     }
+
+
+def pctl(values: list, q: float):
+    """Arbitrary percentile with linear interpolation (same rule as p95)."""
+    if not values:
+        return None
+    ordered = sorted(values)
+    if len(ordered) == 1:
+        return float(ordered[0])
+    position = (len(ordered) - 1) * q
+    low = int(position)
+    high = min(low + 1, len(ordered) - 1)
+    return ordered[low] + (ordered[high] - ordered[low]) * (position - low)
 
 
 def p95(values: list):

@@ -1,5 +1,5 @@
 ﻿==============================================================================
-INDEPENDENT AUDIT -- E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_audit_pkg\FTEC5510-mBridge-Module6
+INDEPENDENT AUDIT -- E:\2026-2027_CUHK\2026-2027 Term1\FTEC5510_Financial_Infrastacture\Group_12 Report\Mid_Term_Presentation\_w\FTEC5510-mBridge-Module6
 ==============================================================================
 
 L1  DATA -- 210 datasets against the Module 2 contract
@@ -38,6 +38,8 @@ L3  RESULTS -- headline numbers recomputed from evidence/metrics.csv
   PASS  quoted paired difference: FX trades S3-S1 baseline   recomputed=-7.70 doc=-7.70
   PASS  quoted paired difference: all delay S3-S1 surge   recomputed=+882.99 doc=+883.00
   PASS  internal identities hold in all 1050 rows
+  PASS  improvement rates match (S1 - x) / S1
+  PASS  queue and distribution columns present in all 1050 rows   missing=[] blank=[]
   PASS  comparison.csv has 35 cells   found 35
   PASS  comparison.csv agrees with metrics.csv
 

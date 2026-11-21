@@ -58,6 +58,8 @@ Every number traces to a `run_id`, a seed and a frozen `config.json`.
 - ordinary overdue **+3.05 pp** / **+5.75 pp**
 - total completion still rises (+2.26 / +1.69 pp) — which is why reporting only
   the total would hide the cost
+- asking the same question the other way (S4 vs S2, S4 vs S3): **ordering is worth
+  56-815 s, waiting is worth -136 to -464 s** — the ordering half does the work
 
 **Speaker note (~50 s)**
 
@@ -69,6 +71,15 @@ Every number traces to a `run_id`, a seed and a frozen `config.json`.
 > the funding-demand weight and a scenario where FX really is unavailable.
 
 ---
+
+## Appendix figures (not on the slides, available on request)
+
+`fig3_queue_length.png`, `fig4_liquidity.png` and `fig5_delay_distribution.png`
+cover the proposal 5.2 deliverables that do not fit into 2.5 minutes: the queue over
+time, the RMB balance over time, and the delay distribution by priority. One sentence
+if asked: *the queue in the surge scenario grows to 80-100 payments because arrivals
+outpace settlement, and the balance sits at the reserve floor after 2.5 hours - which
+is precisely the situation the policies are compared on.*
 
 ## If asked: one-line answers
 

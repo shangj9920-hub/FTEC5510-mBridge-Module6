@@ -45,6 +45,8 @@ import statistics
 import sys
 from pathlib import Path
 
+import bisect
+
 # --------------------------------------------------------------------------- #
 # Constants matching the delivered repository layout
 # --------------------------------------------------------------------------- #
@@ -58,6 +60,9 @@ SCENARIOS = [
     "fx_capacity_shock",   # 6 FX capacity shock
 ]
 SEED_SETS = {"formal": list(range(20001, 20031)), "pilot": [1001, 1002, 1003]}
+
+#: (scenario, seed) pairs whose time series are exported for the appendix figures
+SERIES_TARGETS = {("baseline", 20001), ("payment_surge", 20001)}
 STRATEGIES = ["S0", "S1", "S2", "S3", "S4"]
 
 #: Published Module 4 values, used to prove the metric definitions agree
@@ -156,6 +161,7 @@ def run_matrix(repos: dict, scenarios, seeds, strategies, limit=None, log=print)
 
     fixtures = repos["fixtures"]
     records = []
+    series = []
     total = len(scenarios) * len(seeds) * len(strategies)
     done = 0
     fallback_runs = []
@@ -180,14 +186,42 @@ def run_matrix(repos: dict, scenarios, seeds, strategies, limit=None, log=print)
                           "scenario_id": scenario, "seed": seed,
                           "strategy_id": strategy})
                 records.append(m)
+                if (scenario, seed) in SERIES_TARGETS:
+                    series.extend(series_rows(result, scenario, seed, strategy))
                 if m["using_fallback_m4"] or m["using_fallback_m5"]:
                     fallback_runs.append(m["run_id"])
                 done += 1
                 if limit and done >= limit:
-                    return records, fallback_runs
+                    return records, fallback_runs, series
         log(f"  [{scenario}] {len(strategies) * len(seeds)} runs done, "
             f"{done}/{total} cumulative")
-    return records, fallback_runs
+    return records, fallback_runs, series
+
+
+
+def series_rows(result, scenario, seed, strategy):
+    """Queue length and balance paths on the balance-snapshot time grid.
+
+    Queue length = payments that have arrived and are not settled yet (ineligible
+    ones excluded). This is what the proposal's queue-length chart plots.
+    """
+    payments = result.payments
+    arrivals = sorted(int(float(r["arrival_time"])) for r in payments
+                      if str(r.get("final_status")).upper() != "INELIGIBLE")
+    settles = sorted(int(float(r["settle_time"])) for r in payments
+                     if r.get("final_status") == "SETTLED"
+                     and opt_int(r.get("settle_time")) is not None)
+    out = []
+    for b in result.balances:
+        t = int(b["time"])
+        out.append({"run_id": f"{scenario}_seed{seed}_{strategy}",
+                    "scenario_id": scenario, "seed": seed, "strategy_id": strategy,
+                    "time": t,
+                    "queue_len": bisect.bisect_right(arrivals, t) - bisect.bisect_right(settles, t),
+                    "rmb_total": fnum(b.get("rmb_total")),
+                    "rmb_available": fnum(b.get("rmb_available")),
+                    "hkd_total": fnum(b.get("hkd_total"))})
+    return out
 
 
 # --------------------------------------------------------------------------- #
@@ -197,11 +231,15 @@ METRIC_COLUMNS = ["run_id", "scenario_id", "seed", "strategy_id", "n_payments",
                   "ALL.n", "ALL.settled", "ALL.completion", "ALL.outstanding",
                   "ALL.outstanding_amount_rmb", "ALL.mean_delay", "ALL.p95_delay",
                   "ALL.due", "ALL.overdue", "ALL.overdue_rate",
+                  "ALL.p50_delay", "ALL.p90_delay", "ALL.p99_delay",
+                  "ALL.max_queue_s", "ALL.mean_queue_s", "ALL.outstanding_share",
                   "URGENT.completion", "URGENT.mean_delay", "URGENT.p95_delay",
-                  "URGENT.overdue_rate",
+                  "URGENT.overdue_rate", "URGENT.p50_delay", "URGENT.p90_delay",
+                  "URGENT.p99_delay",
                   "HIGH.completion", "HIGH.mean_delay", "HIGH.p95_delay", "HIGH.overdue_rate",
                   "NORMAL.completion", "NORMAL.mean_delay", "NORMAL.p95_delay",
-                  "NORMAL.overdue_rate",
+                  "NORMAL.overdue_rate", "NORMAL.p50_delay", "NORMAL.p90_delay",
+                  "NORMAL.p99_delay", "NORMAL.max_queue_s",
                   "rmb_liquidity_hours", "hkd_liquidity_hours",
                   "fx_initiated", "fx_completed", "fx_infeasible", "fx_cost_rmb",
                   "fx_rmb_obtained", "fx_hkd_principal",
@@ -292,7 +330,7 @@ def print_tables(records, log=print):
     log("TABLE 4  other contrasts (delay in s, completion in pp)")
     log("=" * 100)
     for key in ("fx_initiated", "ALL.completion", "ALL.mean_delay"):
-        for a, b in (("S1", "S0"), ("S3", "S1"), ("S4", "S1"), ("S4", "S2")):
+        for a, b in (("S1", "S0"), ("S3", "S1"), ("S4", "S1"), ("S4", "S2"), ("S4", "S3")):
             if a not in strats or b not in strats:
                 continue
             cells = []
@@ -354,6 +392,23 @@ def validate_against_module4(records, log=print) -> bool:
     return ok
 
 
+#: metrics for which the proposal's improvement rate is reported, and its direction
+IMPROVE = [("ALL.completion", +1), ("ALL.mean_delay", -1), ("ALL.p95_delay", -1),
+           ("ALL.overdue_rate", -1), ("URGENT.mean_delay", -1),
+           ("NORMAL.completion", +1), ("NORMAL.max_queue_s", -1),
+           ("fx_cost_rmb", -1), ("rmb_liquidity_hours", -1)]
+
+
+def improvement(records, scenario, strategy, key, sign):
+    """Proposal 4.5: (baseline - treatment) / baseline for lower-is-better metrics,
+    reversed when higher is better. Positive always means an improvement."""
+    base = mean_of(records, scenario, "S1", key)
+    value = mean_of(records, scenario, strategy, key)
+    if base in (None, 0) or value is None:
+        return None
+    return sign * (value - base) / base
+
+
 def write_comparison(path: Path, records: list) -> None:
     """One row per scenario x strategy: cell means plus the paired difference vs S1."""
     keys = ["ALL.completion", "ALL.overdue_rate", "ALL.mean_delay", "ALL.p95_delay",
@@ -365,6 +420,7 @@ def write_comparison(path: Path, records: list) -> None:
     header = ["scenario_id", "strategy_id", "n_seeds"] + keys
     for k in keys:
         header += [f"d_{k}_vs_S1", f"ci_{k}_vs_S1"]
+    header += [f"impr_{k}_vs_S1" for k, _sign in IMPROVE]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8-sig", newline="") as fh:
         w = csv.writer(fh)
@@ -383,12 +439,52 @@ def write_comparison(path: Path, records: list) -> None:
                     else:
                         m, low, high = ci95(d)
                         row += [round(m, 6), f"[{low:.4f},{high:.4f}]"]
+                for k, sign in IMPROVE:
+                    v = improvement(records, sc, st, k, sign)
+                    row.append("" if v is None else round(v, 6))
                 w.writerow(row)
 
 
 # --------------------------------------------------------------------------- #
 # main
 # --------------------------------------------------------------------------- #
+CONTRAST_KEYS = [
+    ("ALL.completion", "pp", 100),
+    ("ALL.mean_delay", "s", 1),
+    ("ALL.p95_delay", "s", 1),
+    ("URGENT.mean_delay", "s", 1),
+    ("NORMAL.completion", "pp", 100),
+    ("fx_initiated", "trades", 1),
+    ("fx_cost_rmb", "RMB", 1),
+    ("rmb_liquidity_hours", "M-hours", 1e-6),
+]
+#: proposal 4.3 -- comparing S4 with S2 and S3 isolates the incremental effect of
+#: adding the other mechanism. S4-S2 = value of waiting on top of ordering;
+#: S4-S3 = value of ordering on top of waiting.
+CONTRASTS = [("S4", "S2"), ("S4", "S3")]
+
+
+def write_contrasts(path: Path, records: list) -> None:
+    """One row per (scenario, contrast, metric) with a paired 95% CI."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    header = ["scenario_id", "contrast", "metric", "unit", "n_seeds",
+              "mean", "ci_low", "ci_high", "significant"]
+    with path.open("w", encoding="utf-8", newline="") as fh:
+        w = csv.writer(fh)
+        w.writerow(header)
+        for sc in sorted({r["scenario_id"] for r in records}):
+            for a, b in CONTRASTS:
+                for key, unit, scale in CONTRAST_KEYS:
+                    d = paired(records, sc, key, a, b)
+                    if not d:
+                        continue
+                    m, low, high = ci95(d)
+                    w.writerow([sc, f"{a}-{b}", key, unit, len(d),
+                                round(m * scale, 6), round(low * scale, 6),
+                                round(high * scale, 6),
+                                "yes" if (low > 0 or high < 0) else "no"])
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Module 6 batch runs and metrics")
     ap.add_argument("--repos", default="_repos", help="directory holding module3/4/5")
@@ -425,14 +521,23 @@ def main(argv=None) -> int:
     log(f"matrix     : {len(scenarios)} scenarios x {len(seeds)} seeds x {len(strategies)} "
         f"strategies = {len(scenarios)*len(seeds)*len(strategies)} runs")
 
-    records, fallbacks = run_matrix(repos, scenarios, seeds, strategies,
-                                    limit=a.limit, log=log)
+    records, fallbacks, series = run_matrix(repos, scenarios, seeds, strategies,
+                                            limit=a.limit, log=log)
 
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     write_metrics(out / "metrics.csv", records)
     write_comparison(out / "comparison.csv", records)
+    write_contrasts(out / "contrasts.csv", records)
+    if series:
+        with (out / "series.csv").open("w", encoding="utf-8", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=list(series[0]))
+            w.writeheader()
+            for row in series:
+                w.writerow({k: (round(v, 4) if isinstance(v, float) else v)
+                            for k, v in row.items()})
     log(f"\nfinished {len(records)} runs -> {out/'metrics.csv'}")
+    log("  also wrote comparison.csv (vs S1) and contrasts.csv (S4-S2, S4-S3)")
 
     if fallbacks:
         log(f"\n[!] {len(fallbacks)} runs used a fallback module; those numbers must not "
